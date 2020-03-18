@@ -17,7 +17,7 @@ alpha3 = 0.05
 alpha4 = 0.05
 
 
-def sentenceSimilarity(s1, s2):
+def sentSimilarity(s1, s2):
     def sentence2Vec(s, n):
         line_cut = jp.cut(s)
         l = []
@@ -66,8 +66,9 @@ def sentenceSimilarity(s1, s2):
     for i in range(0, 4):
         if any(v1[i]) and any(v2[i]):
             sims[i] = np.dot(v1[i], v2[i]) / (norm(v1[i]) * norm(v2[i]))
-    return lam * (alpha1 * sims[0] + alpha2 * sims[1] + alpha3 * sims[2] + alpha4 * sims[3])
-
+    return lam * (
+            alpha1 * sims[0] + alpha2 * sims[1] + alpha3 * sims[2] + alpha4 *
+            sims[3])
 
 def sent_most_similarity(s1, s2):
     def sentence2List(s):
@@ -89,20 +90,19 @@ def sent_most_similarity(s1, s2):
     dic_s = sorted(dic_s.items(), key=lambda x: x[0], reverse=True)
     return dic_s
 
-
-if __name__ == '__main__':
-    s1 = '''表示层主要是进行数据格式的转换，主要功能包括：
-1、数据的解码和编码。
-2、数据的加密和解密。
-3、数据的压缩和解压缩。
-'''
-    s2 = '''表示层主要是进行数据格式的转换，主要功能包括：
-1、数据的解码和编码。
-2、数据的加密和解密。
-3、数据的压缩和解压缩。
-'''
-    sTime = time.time()
-    print(sentenceSimilarity(s1, s2))
-    print(sent_most_similarity(s1, s2))
-    eTime = time.time()
-    print('耗时：' + str(int((eTime - sTime) * 1000)) + 'ms')
+# if __name__ == '__main__':
+#     s1 = '''表示层主要是进行数据格式的转换，主要功能包括：
+# 1、数据的解码和编码。
+# 2、数据的加密和解密。
+# 3、数据的压缩和解压缩。
+# '''
+#     s2 = '''表示层主要是进行数据格式的转换，主要功能包括：
+# 1、数据的解码和编码。
+# 2、数据的加密和解密。
+# 3、数据的压缩和解压缩。
+# '''
+#     sTime = time.time()
+#     print(sentenceSimilarity(s1, s2))
+#     print(sent_most_similarity(s1, s2))
+#     eTime = time.time()
+#     print('耗时：' + str(int((eTime - sTime) * 1000)) + 'ms')
