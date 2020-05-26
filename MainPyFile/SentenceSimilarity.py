@@ -17,7 +17,7 @@ alpha3 = 0.05
 alpha4 = 0.05
 
 
-def sentSimilarity(s1, s2):
+def sentSimilarity(s1: str, s2: str, a1, a2, a3, a4):
     def sentence2Vec(s, n):
         line_cut = jp.cut(s)
         l = []
@@ -67,10 +67,11 @@ def sentSimilarity(s1, s2):
         if any(v1[i]) and any(v2[i]):
             sims[i] = np.dot(v1[i], v2[i]) / (norm(v1[i]) * norm(v2[i]))
     return lam * (
-            alpha1 * sims[0] + alpha2 * sims[1] + alpha3 * sims[2] + alpha4 *
+            a1 * sims[0] + a2 * sims[1] + a3 * sims[2] + a4 *
             sims[3])
 
-def sent_most_similarity(s1, s2):
+
+def sent_most_similarity(s1: str, s2: str):
     def sentence2List(s):
         line_cut = jp.cut(s)
         l = []
@@ -79,30 +80,34 @@ def sent_most_similarity(s1, s2):
                 l.append(key.word)
         return l
 
+    l = []
     dic_s = {}
     l1, l2 = sentence2List(s1), sentence2List(s2)
     for i in l1:
         for j in l2:
             try:
-                dic_s[model.wv.similarity(i, j)] = i + ' ' + j
+                dic_s[int(model.wv.similarity(i, j) * 100)] = i + ' ' + j
             except Exception as e:
                 print(e)
-    dic_s = sorted(dic_s.items(), key=lambda x: x[0], reverse=True)
-    return dic_s
+    # dic_s = sorted(dic_s.items(), key=lambda x: x[0], reverse=True)
+    for key, value in dic_s.items():
+        l.append({'similarity': key, 'ws1': value.split()[0], 'ws2': value.split()[1]})
+    return l
 
-# if __name__ == '__main__':
-#     s1 = '''表示层主要是进行数据格式的转换，主要功能包括：
-# 1、数据的解码和编码。
-# 2、数据的加密和解密。
-# 3、数据的压缩和解压缩。
-# '''
-#     s2 = '''表示层主要是进行数据格式的转换，主要功能包括：
-# 1、数据的解码和编码。
-# 2、数据的加密和解密。
-# 3、数据的压缩和解压缩。
-# '''
-#     sTime = time.time()
-#     print(sentenceSimilarity(s1, s2))
-#     print(sent_most_similarity(s1, s2))
-#     eTime = time.time()
-#     print('耗时：' + str(int((eTime - sTime) * 1000)) + 'ms')
+
+if __name__ == '__main__':
+    s1 = '''表示层主要是进行数据格式的转换，主要功能包括：
+1、数据的解码和编码。
+2、数据的加密和解密。
+3、数据的压缩和解压缩。
+'''
+    s2 = '''表示层主要是进行数据格式的转换，主要功能包括：
+1、数据的解码和编码。
+2、数据的加密和解密。
+3、数据的压缩和解压缩。
+'''
+    sTime = time.time()
+    print(sentSimilarity(s1, s2))
+    print(sent_most_similarity(s1, s2))
+    eTime = time.time()
+    print('耗时：' + str(int((eTime - sTime) * 1000)) + 'ms')

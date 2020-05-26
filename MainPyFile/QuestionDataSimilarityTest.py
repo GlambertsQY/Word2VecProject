@@ -39,7 +39,10 @@ class StandardAnswer(Base):
 Session = sessionmaker(bind=engine)
 session = Session()  # 实例化了一个会话（或叫事务），之后的所有操作都是基于这个对象的
 
-if __name__ == '__main__':
+out_list = []
+
+
+def questionDataSplit(a1, a2, a3, a4):
     input_file_name = 'problemData.txt'
     input_file = open(input_file_name, mode='r', encoding='utf-8')
     str_list = []
@@ -66,8 +69,8 @@ if __name__ == '__main__':
     s1_s2 = []
     sTime = time.time()
     for i in range(0, len(l2)):
-        s1.append(MainPyFile.SentenceSimilarity.sentSimilarity(l2[i], l2[i]))
-        s2.append(MainPyFile.SentenceSimilarity.sentSimilarity(l2[i], l3[i]))
+        s1.append(MainPyFile.SentenceSimilarity.sentSimilarity(l2[i], l2[i], a1, a2, a3, a4))
+        s2.append(MainPyFile.SentenceSimilarity.sentSimilarity(l2[i], l3[i], a1, a2, a3, a4))
         s1_s2.append(s1[i] - s2[i])
     eTime = time.time()
     sum = 0
@@ -79,16 +82,30 @@ if __name__ == '__main__':
             o1.append(l1[i])
             o2.append(l2[i])
             sum = sum + 1
-
-    for i in range(0, len(o1)):
-        question = Question(id_q=i + 1, text_q=o1[i], subject='计算机')
-        session.add(question)
-        session.commit()
-    for i in range(0, len(o2)):
-        sa = StandardAnswer(id_s=i + 1, text_s=o2[i], id_q=i + 1)
-        session.add(sa)
-        session.commit()
-    session.close()
+    out_list.append(sum)
     print('耗时：' + str(int((eTime - sTime) * 1000)) + 'ms')
     print('符合个数：' + str(sum))
     print('End')
+
+
+if __name__ == '__main__':
+    questionDataSplit(0.9, 0.05, 0.025, 0.025)
+    # questionDataSplit(0.85, 0.05, 0.05, 0.05)
+    # questionDataSplit(0.8, 0.1, 0.05, 0.05)
+    # questionDataSplit(0.75, 0.1, 0.075, 0.075)
+    # questionDataSplit(0.7, 0.15, 0.075, 0.075)
+    # questionDataSplit(0.65, 0.15, 0.1, 0.1)
+    # questionDataSplit(0.6, 0.2, 0.1, 0.1)
+    # questionDataSplit(0.55, 0.2, 0.125, 0.125)
+    # questionDataSplit(0.5, 0.25, 0.125, 0.125)
+    # questionDataSplit(0.99, 0.005, 0.0025, 0.0025)
+    print('End')
+    # for i in range(0, len(o1)):
+    #     question = Question(id_q=i + 1, text_q=o1[i], subject='计算机')
+    #     session.add(question)
+    #     session.commit()
+    # for i in range(0, len(o2)):
+    #     sa = StandardAnswer(id_s=i + 1, text_s=o2[i], id_q=i + 1)
+    #     session.add(sa)
+    #     session.commit()
+    # session.close()
